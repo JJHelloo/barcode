@@ -4,7 +4,10 @@ November 2021
 */
 
 
-class Main {
-
+class Main 
+{
+  //Some testing - Jolene
+  BarcodeImage bc = new BarcodeImage();
+  bc.displayToConsole();
   
 }

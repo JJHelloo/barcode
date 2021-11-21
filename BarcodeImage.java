@@ -90,9 +90,32 @@ class BarcodeImage implements Cloneable
     return true;
   }
 
+  public void displayToConsole()
+  {
+    int i = 0;
+    int j = 0;
+
+    while (i < imageData.length)
+    {
+      while (j < imageData[i].length)
+      {
+        System.out.print(imageData[i][j]);
+        j++;
+      }
+      j = 0;
+      i++;
+      System.out.println();
+    }
+  }
+
   //Creates a clone of the BarcodeImage object
   public Object clone() throws CloneNotSupportedException
   {
-    
+    BarcodeImage copyBC = (BarcodeImage)super.clone();
+
+    // Creating a deep copy for copyBC
+    copyBC.imageData = this.imageData;
+
+    return copyBC;
   }
 }
