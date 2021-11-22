@@ -97,9 +97,9 @@ public int getActualHeight()
 }
 
 
-// Anna: generateImageFromText(), translateImagetoText(), readCharFromCol(int col), writeCharToCol(int col, int code)
+// Anna: generateImageFromText(), translateImagetoText(), readCharFromCol(int col), writeCharToCol(int col, int code), displayTextToConsole()
 
-//looks at the internal text stored in the implementing class and produces a companion BarcodeImage, internally (or an image in whatever format the implementing class uses).  After this is called, we expect the implementing object to contain a fully-defined image and text that are in agreement with each other.
+//looks at text translate to image
 public boolean generateImageFromText()
 {
   return true;
@@ -107,30 +107,31 @@ public boolean generateImageFromText()
 }
 
 //looks at image and translates to text
-public boolean translateImagetoText()
+public boolean translateImageToText()
 {
   text = "";
-  //step across the columns from bottom left (r[35]c[0]), incrimenting column to readCharFromCol(i)
-  for (int i = 0; i <= actualWidth; i++)
+  //step across the columns from bottom left (r[35]c[0]), incrimenting column to readCharFromCol(i). first column at index [r][0] is not used.
+  for (int i = 1; i <= actualWidth; i++)//I think i starts at 1 to skip the first column
   {
     text += String.valueOf(readCharFromCol(i));
     return true;
-  }  
+  }
   return false;
 }
 
 //Get the ASCII character of a column
 private char readCharFromCol(int col)
 {
-  char colChar;
-  //step up through the column from bottom left (r[35]c[0]), incrimenting row to add each row's value if char is true
-  for (int i = actualHeight; i >= 0; i--)
+  char colChar = 0;
+  int k = 0;
+  //step up through the column from bottom left (r[30]c[0]), incrimenting row to add each row's value if char is true. 
+  for (int i = BarcodeImage.MAX_HEIGHT - 2; i >= BarcodeImage.MAX_HEIGHT - actualHeight +1; i--)
   {
     if (image.getPixel(i, col))
-    {
-      colChar += Math.pow(i,2);
+    {  
+      colChar += Math.pow(2,k);
     }
-    colChar += 0;
+    k++;
   }
   return colChar;
 }
@@ -266,6 +267,11 @@ void displayImageToConsole()
   System.out.print("\n");
 }
 
+//display text to console
+void displayTextToConsole()
+{
+  System.out.println(text);
+}
 //sets the entire image to white (false)
 //ryan
 private void clearImage()
