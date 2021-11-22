@@ -159,13 +159,13 @@ private void moveImageToLowerLeft()
   boolean found = false;
 
   //search for lower left corner of signal. corner of closed limitation lines.
-  for(int j = BarcodeImage.MAX_HEIGHT - 1; j >= 0; j--)
+  for(int j = BarcodeImage.MAX_HEIGHT - 1; j >= 0; j--) //j == row
   {
-    for(int i = 0; i < BarcodeImage.MAX_WIDTH; i++)
+    for(int i = 0; i < BarcodeImage.MAX_WIDTH; i++) //i == column
     {
       if(image.getPixel(j, i) && !found)
       {
-        rowOffset = j;
+        rowOffset = BarcodeImage.MAX_HEIGHT - 1 - j;
         colOffset = i;
         found = true;
       }
@@ -183,51 +183,45 @@ private void moveImageToLowerLeft()
   }
 }
 
-//shift image down 1 row at a time
+//shift image down by offset amount
 //ryan
 private void shiftImageDown(int offset)
 {
-  for(int n = 0; n < offset; n++)
+  for(int j = BarcodeImage.MAX_HEIGHT - 1; j >= 0; j--) //j == row
   {
-    for(int j = BarcodeImage.MAX_HEIGHT - 1; j >= 0; j--) //j == row
+    for(int i = 0; i < BarcodeImage.MAX_WIDTH; i++) //i == column
     {
-      for(int i = 0; i < BarcodeImage.MAX_WIDTH; i++) //i == column
+      if(j < offset)
       {
-        if(j == 0)
-        {
-          //make top row blank
-          image.setPixel(j, i, false);
-        }
-        else
-        {
-          //set to pixel above it
-          image.setPixel(j, i, image.getPixel(j, i - 1));
-        }
+        //make top row(s) blank
+        image.setPixel(j, i, false);
+      }
+      else
+      {
+        //set to pixel above by the offset amount
+        image.setPixel(j, i, image.getPixel(j - offset, i));
       }
     }
   }
 }
 
-//shift image left 1 column at a time
+//shift image left by offset amount
 //ryan
 private void shiftImageLeft(int offset)
 {
-  for(int n = 0; n < offset; n++)
+  for(int j = BarcodeImage.MAX_HEIGHT - 1; j >= 0; j--) //j == row
   {
-    for(int j = BarcodeImage.MAX_HEIGHT - 1; j >= 0; j--)
+    for(int i = 0; i < BarcodeImage.MAX_WIDTH; i++) //i == column
     {
-      for(int i = 0; i < BarcodeImage.MAX_WIDTH; i++)
+      if(i > BarcodeImage.MAX_WIDTH - 1 - offset)
       {
-        if(i == BarcodeImage.MAX_WIDTH - 1)
-        {
-          //make right-most column blank
-          image.setPixel(j, i, false);
-        }
-        else
-        {
-          //set to pixel right of it
-          image.setPixel(j, i, image.getPixel(j + 1, i));
-        }
+        //make right-most column(s) blank
+        image.setPixel(j, i, false);
+      }
+      else
+      {
+        //set to the pixel right of current pixel by offset amount
+        image.setPixel(j, i, image.getPixel(j, i + offset));
       }
     }
   }
