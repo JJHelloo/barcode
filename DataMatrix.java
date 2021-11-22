@@ -102,7 +102,7 @@ public boolean generateImageFromText()
 public boolean translateImagetoText()
 {
   text = "";
-  //step across the columns from bottom left (r[30]c[0]), incrimenting column to readCharFromCol(i)
+  //step across the columns from bottom left (r[35]c[0]), incrimenting column to readCharFromCol(i)
   for (int i = 0; i <= actualWidth; i++)
   {
     text += String.valueOf(readCharFromCol(i));
@@ -163,31 +163,69 @@ private void moveImageToLowerLeft()
     }
   }
 
-  shiftImageDown(yOffset);
-  shiftImageLeft(xOffset);
+  if(yOffset > 0)
+  {
+    shiftImageDown(yOffset);
+  }
+
+  if(xOffset > 0)
+  {
+    shiftImageLeft(xOffset);
+  }
 }
 
+//shift image down 1 row at a time
+//ryan
 private void shiftImageDown(int offset)
 {
-  //image.setPixel(1, 2, true)
-
-  for(int i = BarcodeImage.MAX_HEIGHT - 2; i >= 0; i--)
+  for(int n = 0; n < offset; n++)
   {
-    for(int j = 0; j < BarcodeImage.MAX_WIDTH - 1; j++)
+    //j == height
+    for(int j = BarcodeImage.MAX_HEIGHT - 1; j >= 0; j--)
     {
-      
+      //i == width
+      for(int i = 0; i < BarcodeImage.MAX_WIDTH; i++)
+      {
+        if(j == 0)
+        {
+          //make top row blank
+          image.setPixel(i, j, false);
+        }
+        else
+        {
+          //set to pixel above it
+          image.setPixel(i, j, image.getPixel(i, j - 1));
+        }
+      }
     }
-  }
-
-  if(offset - 1 > 0)
-  {
-    shiftImageDown(offset - 1);
   }
 }
 
+//shift image left 1 column at a time
+//ryan
 private void shiftImageLeft(int offset)
 {
-  //image.setPixel(1, 2, true)
+  for(int n = 0; n < offset; n++)
+  {
+    //j == height
+    for(int j = BarcodeImage.MAX_HEIGHT - 1; j >= 0; j--)
+    {
+      //i == width
+      for(int i = 0; i < BarcodeImage.MAX_WIDTH; i++)
+      {
+        if(i == BarcodeImage.MAX_WIDTH - 1)
+        {
+          //make right-most column blank
+          image.setPixel(i, j, false);
+        }
+        else
+        {
+          //set to pixel right of it
+          image.setPixel(i, j, image.getPixel(i + 1, j));
+        }
+      }
+    }
+  }
 }
 
 //prints out the image to the console
@@ -199,11 +237,17 @@ void displayImageToConsole()
   //System.out.println(WHITE_CHAR);
 }
 
-//sets the image to white
+//sets the entire image to white (false)
 //ryan
 private void clearImage()
 {
-  
+  for(int j = BarcodeImage.MAX_HEIGHT - 1; j >= 0; j--)
+    {
+      for(int i = 0; i < BarcodeImage.MAX_WIDTH; i++)
+      {
+        image.setPixel(i, j, false);
+      }
+    }
 }
 
 } // end of Datamatrix
