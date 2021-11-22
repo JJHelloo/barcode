@@ -14,7 +14,7 @@ class BarcodeImage implements Cloneable
   {
     imageData = new boolean[MAX_HEIGHT][MAX_WIDTH];
     for (int i = 0; i < MAX_HEIGHT; i++)
-      for(int j = 0; i < MAX_WIDTH; j++)
+      for(int j = 0; j < MAX_WIDTH; j++)
         imageData[i][j] = false;
   }
 
@@ -83,7 +83,7 @@ class BarcodeImage implements Cloneable
     if (data.length > MAX_HEIGHT)
       return false;
     //If the longest string is longer than MAX_WIDTH, there is an error
-    else if (longestStr.length > MAX_WIDTH)
+    else if (longestStr > MAX_WIDTH)
       return false;
 
     //There are no errors with the data
@@ -113,8 +113,12 @@ class BarcodeImage implements Cloneable
   {
     BarcodeImage copyBC = (BarcodeImage)super.clone();
 
-    // Creating a deep copy for copyBC
-    copyBC.imageData = this.imageData;
+    copyBC.imageData = new boolean[MAX_HEIGHT][MAX_WIDTH];
+
+    // Creating a deep copy for copyBC imageData
+    for (int i = 0; i < MAX_HEIGHT; i++)
+      for(int j = 0; j < MAX_WIDTH; j++)
+        copyBC.setPixel(i, j, this.imageData[i][j]);
 
     return copyBC;
   }
