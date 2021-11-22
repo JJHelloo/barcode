@@ -59,7 +59,7 @@ private int computeSignalWidth()
   int width = 0;
   for(int i = 0; i < BarcodeImage.MAX_WIDTH; i++)
   {
-    if(image.getPixel(BarcodeImage.MAX_HEIGHt - 1,i) == true)
+    if(image.getPixel(BarcodeImage.MAX_HEIGHT - 1,i) == true)
     {
       width++;
     }
@@ -145,6 +145,7 @@ private void cleanImage()
 //ryan
 private void moveImageToLowerLeft()
 {
+  //offsets from lower left corner
   int xOffset = 0;
   int yOffset = 0;
   boolean found = false;
@@ -232,9 +233,39 @@ private void shiftImageLeft(int offset)
 //ryan
 void displayImageToConsole()
 {
-  //don't forget borders
-  //System.out.println(BLACK_CHAR);
-  //System.out.println(WHITE_CHAR);
+  //top border
+  for(int i = 0; i < actualWidth + 2; i++)
+  {
+    System.out.print("-");
+  }
+  System.out.print("\n");
+  
+
+  for(int j = 0; j < actualHeight; j++)
+  {
+    System.out.print("|"); //left border
+    
+    for(int i = 0; i < actualWidth; i++)
+    {
+      if(image.getPixel(i, j))
+      {
+        System.out.print(BLACK_CHAR);
+      }
+      else
+      {
+        System.out.print(WHITE_CHAR);
+      }
+    }
+
+    System.out.print("|\n"); //right border
+  }
+
+  //bottom border
+  for(int i = 0; i < actualWidth + 2; i++)
+  {
+    System.out.print("-");
+  }
+  System.out.print("\n");
 }
 
 //sets the entire image to white (false)
