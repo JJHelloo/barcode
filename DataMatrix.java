@@ -9,8 +9,8 @@ public static final char WHITE_CHAR = ' ';
 // private variables
 private BarcodeImage image;
 private String text;
-private int actualWidth; //max 65
 private int actualHeight; //max 30
+private int actualWidth; //max 65
 
 //constructors
 //ryan
@@ -52,6 +52,14 @@ public boolean readText(String text)
 // 
 public boolean scan(BarcodeImage image)
 {
+  //placed within a try catch block
+  //this.image = image.clone();
+
+  //cleanImage();
+
+  //actualWidth = computerSignalWidth();
+  //actualHeight = computerSignalHeight();
+
   return true;
 }
 private int computeSignalWidth()
@@ -146,32 +154,32 @@ private void cleanImage()
 private void moveImageToLowerLeft()
 {
   //offsets from lower left corner
-  int xOffset = 0;
-  int yOffset = 0;
+  int rowOffset = 0;
+  int colOffset = 0;
   boolean found = false;
 
   //search for lower left corner of signal. corner of closed limitation lines.
-  for(int i = BarcodeImage.MAX_HEIGHT - 1; i >= 0; i--)
+  for(int j = BarcodeImage.MAX_HEIGHT - 1; j >= 0; j--)
   {
-    for(int j = 0; j < BarcodeImage.MAX_WIDTH; j++)
+    for(int i = 0; i < BarcodeImage.MAX_WIDTH; i++)
     {
       if(image.getPixel(j, i) && !found)
       {
-        xOffset = j;
-        yOffset = i;
+        rowOffset = j;
+        colOffset = i;
         found = true;
       }
     }
   }
 
-  if(yOffset > 0)
+  if(rowOffset > 0)
   {
-    shiftImageDown(yOffset);
+    shiftImageDown(rowOffset);
   }
 
-  if(xOffset > 0)
+  if(colOffset > 0)
   {
-    shiftImageLeft(xOffset);
+    shiftImageLeft(colOffset);
   }
 }
 
@@ -181,21 +189,19 @@ private void shiftImageDown(int offset)
 {
   for(int n = 0; n < offset; n++)
   {
-    //j == height
-    for(int j = BarcodeImage.MAX_HEIGHT - 1; j >= 0; j--)
+    for(int j = BarcodeImage.MAX_HEIGHT - 1; j >= 0; j--) //j == row
     {
-      //i == width
-      for(int i = 0; i < BarcodeImage.MAX_WIDTH; i++)
+      for(int i = 0; i < BarcodeImage.MAX_WIDTH; i++) //i == column
       {
         if(j == 0)
         {
           //make top row blank
-          image.setPixel(i, j, false);
+          image.setPixel(j, i, false);
         }
         else
         {
           //set to pixel above it
-          image.setPixel(i, j, image.getPixel(i, j - 1));
+          image.setPixel(j, i, image.getPixel(j, i - 1));
         }
       }
     }
@@ -208,21 +214,19 @@ private void shiftImageLeft(int offset)
 {
   for(int n = 0; n < offset; n++)
   {
-    //j == height
     for(int j = BarcodeImage.MAX_HEIGHT - 1; j >= 0; j--)
     {
-      //i == width
       for(int i = 0; i < BarcodeImage.MAX_WIDTH; i++)
       {
         if(i == BarcodeImage.MAX_WIDTH - 1)
         {
           //make right-most column blank
-          image.setPixel(i, j, false);
+          image.setPixel(j, i, false);
         }
         else
         {
           //set to pixel right of it
-          image.setPixel(i, j, image.getPixel(i + 1, j));
+          image.setPixel(j, i, image.getPixel(j + 1, i));
         }
       }
     }
@@ -247,7 +251,7 @@ void displayImageToConsole()
     
     for(int i = 0; i < actualWidth; i++)
     {
-      if(image.getPixel(i, j))
+      if(image.getPixel(j, i))
       {
         System.out.print(BLACK_CHAR);
       }
@@ -276,7 +280,7 @@ private void clearImage()
     {
       for(int i = 0; i < BarcodeImage.MAX_WIDTH; i++)
       {
-        image.setPixel(i, j, false);
+        image.setPixel(j, i, false);
       }
     }
 }
