@@ -12,7 +12,9 @@ class BarcodeImage implements Cloneable
   //Default constructor creates an all-white array of max size
   BarcodeImage()
   {
+    //Creates new array of max size
     imageData = new boolean[MAX_HEIGHT][MAX_WIDTH];
+    //Sets all data in the array to false
     for (int i = 0; i < MAX_HEIGHT; i++)
       for(int j = 0; j < MAX_WIDTH; j++)
         imageData[i][j] = false;
@@ -27,8 +29,10 @@ class BarcodeImage implements Cloneable
   //Accessor for chars in the array
   boolean getPixel(int row, int col)
   {
+    //Returns false if there is an outOfIndex issue
     if (row > MAX_HEIGHT || col > MAX_WIDTH)
       return false;
+    //Returns the boolean value of the requested pixel
     else
       return imageData[row][col];
   }
@@ -36,8 +40,10 @@ class BarcodeImage implements Cloneable
   //Mutator for chars in the array
   boolean setPixel(int row, int col, boolean value)
   {
+    //Returns false if there is an outOfIndex issue
     if (row > MAX_HEIGHT || col > MAX_WIDTH)
       return false;
+    //Sets the pixel to the specified value and returns true
     else
     {
       imageData[row][col] = value;
@@ -92,18 +98,23 @@ class BarcodeImage implements Cloneable
 
   public void displayToConsole()
   {
+    //Local variable declaration
     int i = 0;
     int j = 0;
 
+    //Iterates through the 2D array rows
     while (i < imageData.length)
     {
+      //Iterates through the current row by column
       while (j < imageData[i].length)
       {
+        //Prints the elements consecutively
         System.out.print(imageData[i][j]);
         j++;
       }
       j = 0;
       i++;
+      //New line for new row
       System.out.println();
     }
   }
@@ -111,15 +122,18 @@ class BarcodeImage implements Cloneable
   //Creates a clone of the BarcodeImage object
   public Object clone() throws CloneNotSupportedException
   {
+    //Clone the calling object
     BarcodeImage copyBC = (BarcodeImage)super.clone();
 
+    //Removes the reference copy in the clone
     copyBC.imageData = new boolean[MAX_HEIGHT][MAX_WIDTH];
 
-    // Creating a deep copy for copyBC imageData
+    //Creates a deep copy for copyBC imageData
     for (int i = 0; i < MAX_HEIGHT; i++)
       for(int j = 0; j < MAX_WIDTH; j++)
         copyBC.setPixel(i, j, this.imageData[i][j]);
 
+    //Return the clone
     return copyBC;
   }
 }

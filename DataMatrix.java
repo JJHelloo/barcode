@@ -4,7 +4,7 @@
 I just wrote out some of the methods just to
 get some of the outline of it going - justin
 */
-/*class DataMatrix 
+class DataMatrix 
 {
 // public
 public static final char BLACK_CHAR = '*';
@@ -90,4 +90,4 @@ private boolean writeCharToCol(int col, int code)
 
 
 
-} // end of Datamatrix*/
+} // end of Datamatrix
