@@ -136,9 +136,10 @@ private char readCharFromCol(int col)
   return colChar;
 }
 
-//take a column index and ASCII code for the char and turn it into an encoded column (*) why return a boolean here if it is a helper for the above method?
+//take a column index and ASCII code for the char and turn it into an encoded column (*) 
 private boolean writeCharToCol(int col, int code)
 {
+  
   return true;
   //or return false;
 }
@@ -240,7 +241,7 @@ void displayImageToConsole()
   System.out.print("\n");
   
 
-  for(int j = 0; j < actualHeight; j++)
+  for(int j = BarcodeImage.MAX_HEIGHT - actualHeight; j < BarcodeImage.MAX_HEIGHT; j++)
   {
     System.out.print("|"); //left border
     
@@ -268,6 +269,7 @@ void displayImageToConsole()
 }
 
 //display text to console
+//Anna
 void displayTextToConsole()
 {
   System.out.println(text);
