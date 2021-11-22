@@ -1,9 +1,5 @@
 // Created by Justin, Ryan and Ana
 
-/*
-I just wrote out some of the methods just to
-get some of the outline of it going - justin
-*/
 class DataMatrix 
 {
 // public
@@ -60,11 +56,27 @@ public boolean scan(BarcodeImage image)
 }
 private int computeSignalWidth()
 {
-  
+  int width = 0;
+  for(int i = 0; i < BarcodeImage.MAX_HEIGHT; i++)
+  {
+    if(image.getPixel(i,0) == true)
+    {
+      height++;
+    }
+  }
+  return width; 
 }
 private int computeSignalHeight()
 {
-
+  int height = 0;
+  for(int i = 0; i < BarcodeImage.MAX_HEIGHT; i++)
+  {
+    if(image.getPixel(i,0) == true)
+    {
+      height++;
+    }
+  }
+  return height;
 }
 // accessors for width and height
 public int getActualWidth()
@@ -89,27 +101,30 @@ public boolean generateImageFromText()
 //looks at image and translates to text
 public boolean translateImagetoText()
 {
-  for (int i = actualHeight; i >= 0; i--)
+  text = "";
+  //step across the columns from bottom left (r[30]c[0]), incrimenting column to readCharFromCol(i)
+  for (int i = 0; i <= actualWidth; i++)
   {
     text += String.valueOf(readCharFromCol(i));
-     return true;
+    return true;
   }  
-  //or return false;
+  return false;
 }
 
-//take a column index input and return a char based on the value of each row in that column - one ASCII character
+//Get the ASCII character of a column
 private char readCharFromCol(int col)
 {
-  char someChar = '';
-  for (int i = 0; i < actualHeight; i++)
+  char colChar;
+  //step up through the column from bottom left (r[30]c[0])
+  for (int i = actualHeight; i >= 0; i--)
   {
-    if (image[30-i][col])
+    if (image.getPixel(i, col))
     {
-      someChar += Math.pow(i,2);
+      colChar += Math.pow(i,2);
     }
-    someChar += 0;
+    colChar += 0;
   }
-  return someChar;
+  return colChar;
 }
 
 //take a column index and ASCII code for the char and turn it into an encoded column (*) why return a boolean here if it is a helper for the above method?
@@ -123,27 +138,43 @@ private boolean writeCharToCol(int col, int code)
 //ryan
 private void cleanImage()
 {
-  //image.getPixel(1, 2);
-  //image.setPixel(1, 2, true)
-  //System.out.println(BLACK_CHAR);
-  //System.out.println(WHITE_CHAR);
+  moveImageToLowerLeft();
 }
 
 //cleanImage helper methods. move in specific direction.
 //ryan
 private void moveImageToLowerLeft()
 {
+  int xOffset = 0;
+  int yOffset = 0;
+  boolean found = false;
 
+  //search for lower left corner of signal. corner of closed limitation lines.
+  for(int i = BarcodeImage.MAX_HEIGHT - 1; i >= 0; i--)
+  {
+    for(int j = 0; j < BarcodeImage.MAX_WIDTH; j++)
+    {
+      if(image.getPixel(j, i) && !found)
+      {
+        xOffset = j;
+        yOffset = i;
+        found = true;
+      }
+    }
+  }
+
+  shiftImageDown(yOffset);
+  shiftImageLeft(xOffset);
 }
 
 private void shiftImageDown(int offset)
 {
-  
+  //image.setPixel(1, 2, true)
 }
 
 private void shiftImageLeft(int offset)
 {
-  
+  //image.setPixel(1, 2, true)
 }
 
 //prints out the image to the console
@@ -151,6 +182,8 @@ private void shiftImageLeft(int offset)
 void displayImageToConsole()
 {
   //don't forget borders
+  //System.out.println(BLACK_CHAR);
+  //System.out.println(WHITE_CHAR);
 }
 
 //sets the image to white

@@ -24,7 +24,7 @@ class BarcodeImage implements Cloneable
   BarcodeImage(String[] strData)
   {
     //Local variable declaration
-    int k = MAX_HEIGHT;
+    int k = MAX_HEIGHT - 1;
     
     //Check for null or oversized data
     if (!checkSize(strData))
@@ -92,12 +92,10 @@ class BarcodeImage implements Cloneable
     //If the array is null, there is an error
     if(data == null)
     {
-      //Testing
       System.out.println("null array");
       return false;
     }
 
-/*
     //Checks each String in the array for a null value
     for (String str : data)
     {
@@ -109,13 +107,11 @@ class BarcodeImage implements Cloneable
     }
 
     //If an element of the array is null, there is an error
-    if(nullFlag = true)
+    if(nullFlag)
     {
-      //Testing
       System.out.println("null string");
       return false;
     }
-*/
 
     //Checks every String in the array to find the longest one
     for (int i = 0; i < data.length; i++)
@@ -127,14 +123,13 @@ class BarcodeImage implements Cloneable
     //If there are more strings in the array than the MAX_HEIGHT, there is an error
     if (data.length > MAX_HEIGHT)
     {
-      //Testing
       System.out.println("too tall");
       return false;
     }
+    
     //If the longest string is longer than MAX_WIDTH, there is an error
     else if (longestStr > MAX_WIDTH)
     {
-      //Testing
       System.out.println("too wide");
       return false;
     }
