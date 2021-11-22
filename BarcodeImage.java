@@ -14,7 +14,7 @@ class BarcodeImage implements Cloneable
   {
     //Creates new array of max size
     imageData = new boolean[MAX_HEIGHT][MAX_WIDTH];
-    //Sets all data in the array to false
+    //Explicitly sets all data in the array to false
     for (int i = 0; i < MAX_HEIGHT; i++)
       for(int j = 0; j < MAX_WIDTH; j++)
         imageData[i][j] = false;
@@ -23,6 +23,35 @@ class BarcodeImage implements Cloneable
   //Constructor receives an array of Strings and creates an array of booleans, placed in the lower-left corner of the max array
   BarcodeImage(String[] strData)
   {
+    //Local variable declaration
+    int k = MAX_HEIGHT;
+    
+    //Check for null or oversized data
+    if (!checkSize(strData))
+    {
+      //Print error message
+      System.out.println("The data provided is null or oversized");
+      //Terminate program
+      System.exit(1);
+    }
+
+    //Creates new array of max size, with all values defaulted to false
+    imageData = new boolean[MAX_HEIGHT][MAX_WIDTH];
+
+    //Iterates backwards through the array of Strings
+    for(int j = (strData.length - 1); j >= 0; j--)
+    {
+      //Iterates forwards through the characters in the String array
+      for (int i = 0; i < strData[j].length(); i++)
+      {
+        //System.out.println("row in bool: []" + k + " element in str[]" + j + " char in String: " + i);
+        //Check for the char to be set to true, default is false so nothing needs to be done otherwise
+        if (strData[j].charAt(i) == '*')
+          imageData[k][i] = true;
+      }
+      //Moves a row up in the boolean array
+      k--;
+    }
 
   }
 
@@ -62,8 +91,13 @@ class BarcodeImage implements Cloneable
 
     //If the array is null, there is an error
     if(data == null)
+    {
+      //Testing
+      System.out.println("null array");
       return false;
+    }
 
+/*
     //Checks each String in the array for a null value
     for (String str : data)
     {
@@ -76,7 +110,12 @@ class BarcodeImage implements Cloneable
 
     //If an element of the array is null, there is an error
     if(nullFlag = true)
+    {
+      //Testing
+      System.out.println("null string");
       return false;
+    }
+*/
 
     //Checks every String in the array to find the longest one
     for (int i = 0; i < data.length; i++)
@@ -87,11 +126,18 @@ class BarcodeImage implements Cloneable
 
     //If there are more strings in the array than the MAX_HEIGHT, there is an error
     if (data.length > MAX_HEIGHT)
+    {
+      //Testing
+      System.out.println("too tall");
       return false;
+    }
     //If the longest string is longer than MAX_WIDTH, there is an error
     else if (longestStr > MAX_WIDTH)
+    {
+      //Testing
+      System.out.println("too wide");
       return false;
-
+    }
     //There are no errors with the data
     return true;
   }
