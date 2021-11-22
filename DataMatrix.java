@@ -57,11 +57,11 @@ public boolean scan(BarcodeImage image)
 private int computeSignalWidth()
 {
   int width = 0;
-  for(int i = 0; i < BarcodeImage.MAX_HEIGHT; i++)
+  for(int i = 0; i < BarcodeImage.MAX_WIDTH; i++)
   {
-    if(image.getPixel(i,0) == true)
+    if(image.getPixel(BarcodeImage.MAX_HEIGHt - 1,i) == true)
     {
-      height++;
+      width++;
     }
   }
   return width; 
@@ -115,7 +115,7 @@ public boolean translateImagetoText()
 private char readCharFromCol(int col)
 {
   char colChar;
-  //step up through the column from bottom left (r[30]c[0])
+  //step up through the column from bottom left (r[35]c[0]), incrimenting row to add each row's value if char is true
   for (int i = actualHeight; i >= 0; i--)
   {
     if (image.getPixel(i, col))
@@ -170,6 +170,19 @@ private void moveImageToLowerLeft()
 private void shiftImageDown(int offset)
 {
   //image.setPixel(1, 2, true)
+
+  for(int i = BarcodeImage.MAX_HEIGHT - 2; i >= 0; i--)
+  {
+    for(int j = 0; j < BarcodeImage.MAX_WIDTH - 1; j++)
+    {
+      
+    }
+  }
+
+  if(offset - 1 > 0)
+  {
+    shiftImageDown(offset - 1);
+  }
 }
 
 private void shiftImageLeft(int offset)
