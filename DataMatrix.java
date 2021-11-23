@@ -172,14 +172,17 @@ private boolean buildBorders()
 //looks at image and translates to text
 public boolean translateImageToText()
 {
+  if (image == null)
+    return false;
+    
   text = "";
   //step across the columns from bottom left (r[35]c[0]), incrimenting column to readCharFromCol(i). first column at index [r][0] is not used.
-  for (int i = 1; i <= actualWidth - 2; i++)//I think i starts at 1 to skip the first column
+  for (int i = 1; i <= actualWidth - 2; i++)
   {
     text += String.valueOf(readCharFromCol(i));
-    return true;
   }
-  return false;
+
+  return true;
 }
 
 //Get the ASCII character of a column
