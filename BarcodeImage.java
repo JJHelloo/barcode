@@ -44,7 +44,6 @@ class BarcodeImage implements Cloneable
       //Iterates forwards through the characters in the String array
       for (int i = 0; i < strData[j].length(); i++)
       {
-        //System.out.println("row in bool: []" + k + " element in str[]" + j + " char in String: " + i);
         //Check for the char to be set to true, default is false so nothing needs to be done otherwise
         if (strData[j].charAt(i) == '*')
           imageData[k][i] = true;
@@ -153,6 +152,7 @@ class BarcodeImage implements Cloneable
         System.out.print(imageData[i][j]);
         j++;
       }
+      
       j = 0;
       i++;
       //New line for new row
