@@ -42,7 +42,7 @@ public DataMatrix(String text)
 // mutator for text
 public boolean readText(String text)
 {
-  if (text == null)
+  if (text == null || text.length() > BarcodeImage.MAX_WIDTH - 2)
   {
     return false;
   }
@@ -52,13 +52,19 @@ public boolean readText(String text)
 // 
 public boolean scan(BarcodeImage image)
 {
-  //placed within a try catch block
-  //this.image = image.clone();
+  try
+  {
+    this.image = (BarcodeImage)image.clone();
+  }
+  catch (CloneNotSupportedException e)
+  {
+    
+  }
 
-  //cleanImage();
+  cleanImage();
 
-  //actualWidth = computerSignalWidth();
-  //actualHeight = computerSignalHeight();
+  actualWidth = computeSignalWidth();
+  actualHeight = computeSignalHeight();
 
   return true;
 }
@@ -89,29 +95,86 @@ private int computeSignalHeight()
 // accessors for width and height
 public int getActualWidth()
 {
-return actualWidth;
+  return actualWidth;
 }
 public int getActualHeight()
 {
   return actualHeight;
 }
 
-
 // Anna: generateImageFromText(), translateImagetoText(), readCharFromCol(int col), writeCharToCol(int col, int code), displayTextToConsole()
 
-//looks at text translate to image
+//looks at text, translate to image
 public boolean generateImageFromText()
 {
+  if(text == null)
+  {
+    return false;
+  }
+
+  clearImage();
+
+  actualWidth = text.length() + 2;
+  actualHeight = 10;
+
+  buildBorders();
+
+  //step across String text, incrimenting to the end
+  for (int i = 0; i < text.length(); i++)
+  {
+    //get one char. result will be an ascii numerical value
+    char oneChar = text.charAt(i);
+    writeCharToCol(i + 1, oneChar); //column, ascii val
+  }
   return true;
-  //or return false;
 }
 
+//build borders
+private boolean buildBorders()
+{
+  if(actualWidth == 0 || actualHeight == 0)
+  {
+    return false;
+  }
+
+  //left border
+  for(int i = BarcodeImage.MAX_HEIGHT - 1; i >= BarcodeImage.MAX_HEIGHT - actualHeight; i--)
+  {
+    image.setPixel(i, 0, true);
+  }
+
+  //bottom border
+  for(int i = 0; i < BarcodeImage.MAX_WIDTH; i++)
+  {
+    image.setPixel(0, i, true);
+  }
+
+  //top border
+  for(int i = 0; i < BarcodeImage.MAX_WIDTH; i++)
+  {
+    if(i % 2 == 1)
+    {
+      image.setPixel(BarcodeImage.MAX_HEIGHT - actualHeight, i, true);
+    }
+  }
+  
+  //right border
+  for(int i = BarcodeImage.MAX_HEIGHT - 1; i >= BarcodeImage.MAX_HEIGHT - actualHeight; i--)
+  {
+    if(i % 2 == 1)
+    {
+      image.setPixel(i, actualWidth - 1, true);
+    }
+  }
+
+  return true;
+}
 //looks at image and translates to text
 public boolean translateImageToText()
 {
   text = "";
   //step across the columns from bottom left (r[35]c[0]), incrimenting column to readCharFromCol(i). first column at index [r][0] is not used.
-  for (int i = 1; i <= actualWidth; i++)//I think i starts at 1 to skip the first column
+  for (int i = 1; i <= actualWidth - 2; i++)//I think i starts at 1 to skip the first column
   {
     text += String.valueOf(readCharFromCol(i));
     return true;
@@ -137,11 +200,33 @@ private char readCharFromCol(int col)
 }
 
 //take a column index and ASCII code for the char and turn it into an encoded column (*) 
-private boolean writeCharToCol(int col, int code)
+private boolean writeCharToCol(int col, char code)
 {
-  
+  // Convert ASCII value to binary
+  String bin = "";
+  for (int i = 0; i < actualHeight - 2; i++)
+  {
+    if (code % 2 == 1)
+    {
+      bin += '1';
+    }
+    else
+      bin += '0';
+    code /= 2;
+  }
+
+  if (bin == "")
+    return false;
+    
+  //step up through column placing boolean based off of strToBinary
+  for (int i = 0; i < bin.length(); i++)
+  {
+    if(bin.charAt(i) == 1)
+    {
+      image.setPixel(i + 1, col, true);
+    }
+  }
   return true;
-  //or return false;
 }
 
 //moves the image(signal) to the lower left corner
@@ -231,7 +316,7 @@ private void shiftImageLeft(int offset)
 
 //prints out the image to the console
 //ryan
-void displayImageToConsole()
+public void displayImageToConsole()
 {
   //top border
   for(int i = 0; i < actualWidth + 2; i++)
@@ -260,17 +345,12 @@ void displayImageToConsole()
     System.out.print("|\n"); //right border
   }
 
-  //bottom border
-  for(int i = 0; i < actualWidth + 2; i++)
-  {
-    System.out.print("-");
-  }
   System.out.print("\n");
 }
 
 //display text to console
 //Anna
-void displayTextToConsole()
+public void displayTextToConsole()
 {
   System.out.println(text);
 }
