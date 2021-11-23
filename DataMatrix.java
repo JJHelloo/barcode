@@ -220,15 +220,18 @@ private boolean writeCharToCol(int col, char code)
 
   if (bin == "")
     return false;
-    
+
+  int k = 2;
   //step up through column placing boolean based off of strToBinary
   for (int i = 0; i < bin.length(); i++)
   {
-    if(bin.charAt(i) == 1)
+    if(bin.charAt(i) == '1')
     {
-      image.setPixel(i + 1, col, true);
+      image.setPixel(BarcodeImage.MAX_HEIGHT - k, col, true);
     }
+    k++;
   }
+
   return true;
 }
 
