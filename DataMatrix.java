@@ -146,13 +146,13 @@ private boolean buildBorders()
   //bottom border
   for(int i = 0; i < BarcodeImage.MAX_WIDTH; i++)
   {
-    image.setPixel(0, i, true);
+    image.setPixel(BarcodeImage.MAX_HEIGHT - 1, i, true);
   }
 
   //top border
   for(int i = 0; i < BarcodeImage.MAX_WIDTH; i++)
   {
-    if(i % 2 == 1)
+    if(i % 2 == 0)
     {
       image.setPixel(BarcodeImage.MAX_HEIGHT - actualHeight, i, true);
     }
